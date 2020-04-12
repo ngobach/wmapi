@@ -87,7 +87,7 @@ func castToInt(s string) int {
 	return v
 }
 
-func buildDailyCases(start time.Time, totals []int, actives []int, news []int) []DailyStatistic {
+func buildDailyCases(start time.Time, totals []int, news []int, actives []int) []DailyStatistic {
 	result := make([]DailyStatistic, len(totals))
 	for i := 0; i < len(totals); i++ {
 		result[i].Date = start.Add(time.Hour * time.Duration(24*i))

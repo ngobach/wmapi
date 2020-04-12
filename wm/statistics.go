@@ -3,18 +3,17 @@ package wm
 import "time"
 
 type DailyStatistic struct {
-	Date   time.Time
-	Total  int
-	Active int
-	New    int
+	Date   time.Time `json:"date"`
+	Total  int       `json:"total"`
+	Active int       `json:"active"`
+	New    int       `json:"new"`
 }
 
 type Report struct {
-	Country   *Country
-	Total     int
-	Active    int
-	Deaths    int
-	Recovered int
-	Days      []DailyStatistic
-	UpdatedAt time.Time
+	Country   *Country         `json:"country,omitempty"`
+	Total     int              `json:"total,omitempty"`
+	Deaths    int              `json:"deaths,omitempty"`
+	Recovered int              `json:"recovered,omitempty"`
+	Days      []DailyStatistic `json:"days,omitempty"`
+	UpdatedAt time.Time        `json:"updated_at,omitempty"`
 }
