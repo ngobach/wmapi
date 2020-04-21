@@ -12,7 +12,13 @@ import (
 
 func StartServer() error {
 	addr := fmt.Sprintf("0.0.0.0:%d", config.Port)
-	hanoi, _ := time.LoadLocation("asia/Ho_Chi_Minh")
+	tz, err := time.LoadLocation("asia/Ho_Chi_Minh")
+	if err != nil {
+		tz, err = time.LoadLocation("")
+	}
+	if err != nil {
+		panic(err)
+	}
 	g := gin.Default()
 	g.GET("/", func(c *gin.Context) {
 		c.Redirect(301, "/viet-nam")
@@ -45,7 +51,7 @@ func StartServer() error {
 				fmt.Sprintf("%d recovered", resp.Recovered),
 				fmt.Sprintf("%d deaths", resp.Deaths),
 			})
-			table.SetCaption(true, fmt.Sprintf("Updated at %s", resp.UpdatedAt.In(hanoi).Format("01/02/2006 15:04")))
+			table.SetCaption(true, fmt.Sprintf("Updated at %s", resp.UpdatedAt.In(tz).Format("01/02/2006 15:04")))
 			table.Render()
 			context.String(200, "%s", buf.String())
 		}
