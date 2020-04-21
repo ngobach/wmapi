@@ -65,6 +65,12 @@ func fastCall(url string) (*string, error) {
 	if err != nil {
 		return nil, fmt.Errorf("unable to fetch document: %w", err)
 	}
+	defer func() {
+		_ = resp.Body.Close()
+	}()
+	if resp.StatusCode >= 300 {
+		return nil, fmt.Errorf("unexpected error code %d", resp.StatusCode)
+	}
 	doc, err := func(raw []byte, err error) (string, error) {
 		return string(raw), err
 	}(ioutil.ReadAll(resp.Body))
@@ -95,6 +101,9 @@ func buildDailyCases(start time.Time, totals []int, news []int, actives []int) [
 		result[i].Active = actives[i]
 		result[i].New = news[i]
 	}
+	if len(result) > 30 {
+		result = result[len(result)-30:]
+	}
 	return result
 }
 
@@ -106,6 +115,10 @@ func GetStatistics(country *Country) (*Report, error) {
 	doc, err := goquery.NewDocumentFromReader(strings.NewReader(*response))
 	if err != nil {
 		return nil, err
+	}
+	docTitle := doc.Find("title").Text()
+	if strings.Contains(docTitle, "404") {
+		return nil, fmt.Errorf("document not found: %s", docTitle)
 	}
 	rp := Report{
 		Country:   country,

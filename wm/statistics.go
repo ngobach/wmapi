@@ -10,10 +10,10 @@ type DailyStatistic struct {
 }
 
 type Report struct {
-	Country   *Country         `json:"country,omitempty"`
-	Total     int              `json:"total,omitempty"`
-	Deaths    int              `json:"deaths,omitempty"`
-	Recovered int              `json:"recovered,omitempty"`
-	Days      []DailyStatistic `json:"days,omitempty"`
-	UpdatedAt time.Time        `json:"updated_at,omitempty"`
+	Country   *Country         `json:"country"`
+	Total     int              `json:"total"`
+	Deaths    int              `json:"deaths"`
+	Recovered int              `json:"recovered"`
+	Days      []DailyStatistic `json:"days"`
+	UpdatedAt time.Time        `json:"updated_at"`
 }
